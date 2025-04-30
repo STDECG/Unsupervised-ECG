@@ -4,7 +4,7 @@ import torch
 from torch import nn
 from torch.utils.data import random_split
 
-import DenseNet
+import densenet
 from dataset import ECGDataset
 from utils import set_seed, EarlyStopping
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle=True)
     val_loader = torch.utils.data.DataLoader(val_data, batch_size=batch_size, shuffle=False)
 
-    model = DenseNet.DenseNet(num_classes=2).to(device)
+    model = densenet.DenseNet(num_classes=2).to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=0.0001)
     criterion = nn.CrossEntropyLoss().to(device)
 

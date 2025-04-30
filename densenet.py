@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+
 class DenseNet(nn.Module):
     def __init__(self, growth_rate=8, input_channels=1, num_classes=2):
         super(DenseNet, self).__init__()
