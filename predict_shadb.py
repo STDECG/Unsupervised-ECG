@@ -45,10 +45,7 @@ if __name__ == '__main__':
     print(f'Recall: {test_recall}')
     print(f'Precision: {test_precision}')
 
-    # 计算混淆矩阵
     cm = confusion_matrix(test_trues, test_preds)
-
-    # 定义TP、TN、FP、FN
     tn, fp, fn, tp = cm.ravel()
 
     plt.figure(figsize=(8, 6))
