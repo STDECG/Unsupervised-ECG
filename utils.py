@@ -2,6 +2,8 @@ import numpy as np
 import os
 import random
 import torch
+from scipy.signal import butter, lfilter, medfilt, iirnotch, filtfilt
+import scipy.signal as signal
 
 
 def load_data(npy_file):
@@ -31,6 +33,56 @@ def min_max_normalize(ecg_signal):
     normalized_signal = (ecg_signal - min_val) / (max_val - min_val)
 
     return normalized_signal
+
+
+def resample(data, sample_rate, resample_rate):
+    number_of_samples = round(len(data) * float(resample_rate) / sample_rate)
+    data = signal.resample(data, number_of_samples)
+
+    return data
+
+
+def butter_bandpass_filter(data, lowcut, highcut, fs, order):
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    high = highcut / nyq
+    b, a = butter(order, [low, high], btype='band')
+    y = lfilter(b, a, data)
+
+    return y
+
+
+def butter_lowpass_filter(data, lowcut, fs, order=1):
+    nyq = 0.5 * fs
+    low = lowcut / nyq
+    b, a = butter(order, low, btype='low')
+    y = lfilter(b, a, data)
+    return y
+
+
+def butter_highpass_filter(data, highcut, fs, order=1):
+    nyq = 0.5 * fs
+    high = highcut / nyq
+    b, a = butter(order, high, btype='high')
+    y = lfilter(b, a, data)
+    return y
+
+
+def baseline_remove(data, fs):
+    baseline = medfilt(medfilt(data, int(0.2 * fs) - 1), int(0.6 * fs) - 1)
+    y = data - baseline
+    return y
+
+
+def powerline_remove(data, fs):
+    f0 = 50
+    Q = 30
+    w0 = f0 / (fs / 2)
+
+    b, a = iirnotch(w0, Q)
+    y = filtfilt(b, a, data)
+
+    return y
 
 
 class EarlyStopping:

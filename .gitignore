@@ -1,2 +1,8 @@
 /.idea
 /__pycache__
+/CPSC2025
+/data
+/data_labeled
+/data_unlabeled
+/SHDB-AF
+/npy_files
