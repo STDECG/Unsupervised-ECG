@@ -87,7 +87,6 @@ if __name__ == '__main__':
     records = [os.path.splitext(record)[0] for record in records if record.endswith('.atr')]
 
     normalize = True
-    fs = 200
     window_size = 10
     af_label = 'AFIB'
 
