@@ -1,18 +1,17 @@
-import densenet
-from dataset import ECGDataset
-from utils import set_seed
-
-import torch
 import numpy as np
+import seaborn as sns
+import torch
 from matplotlib import pyplot as plt
-from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score, confusion_matrix
 from sklearn.cluster import KMeans
 from sklearn.manifold import TSNE
+from sklearn.metrics import accuracy_score, f1_score, recall_score, precision_score, confusion_matrix
 from sklearn.preprocessing import StandardScaler
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import seaborn as sns
-from sklearn.decomposition import PCA
+
+import densenet
+from dataset import ECGDataset
+from utils import set_seed
 
 
 def extract_features(model, data_loader, device):
@@ -36,9 +35,6 @@ def extract_features(model, data_loader, device):
 def cluster_and_evaluate(features, true_labels, n_clusters=2):
     scaler = StandardScaler()
     features_scaled = scaler.fit_transform(features)
-
-    # pca = PCA(n_components=50)
-    # features_scaled = pca.fit_transform(features_scaled)
 
     kmeans = KMeans(n_clusters=n_clusters, random_state=42)
     cluster_labels = kmeans.fit_predict(features_scaled)
@@ -101,6 +97,5 @@ if __name__ == '__main__':
     print(f"Extracted features shape: {features.shape}")
 
     cluster_labels = cluster_and_evaluate(features, true_labels, n_clusters=2)
-
     # np.save("extracted_features.npy", features)
     # np.save("cluster_results.npy", cluster_labels)
